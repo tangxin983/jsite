@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false">
+	<!--
+   		maxEntriesLocalHeap 内存中最大缓存对象数
+        maxEntriesLocalDisk 保存在本地磁盘中的的最大缓存对象数
+       	eternal 缓存对象是否永久有效，一但设置了，timeout将不起作用
+        overflowToDisk 当内存中缓存对象数量达到maxElementsInMemory时，是否写到本地磁盘中
+       	timeToLiveSeconds 设置缓存对象在失效前允许存活时间
+    -->
+    
+    <!-- 默认磁盘保存目录 -->
+    <diskStore path="java.io.tmpdir" />
+
+	<!-- 默认缓存 -->
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToLiveSeconds="3600"
+		overflowToDisk="false" maxEntriesLocalDisk="100000" />
+
+	<!-- shiro授权缓存 -->
+	<cache name="shiroAuthorizationCache" maxEntriesLocalHeap="10000" eternal="false" timeToLiveSeconds="3600"
+		overflowToDisk="false" maxEntriesLocalDisk="100000" />
+		
+	<!-- 字典列表缓存 -->
+	<cache name="dictCache" maxEntriesLocalHeap="10000" eternal="false" timeToLiveSeconds="3600"
+		overflowToDisk="false" maxEntriesLocalDisk="100000" />
+		
+	<!-- cms栏目缓存 -->
+	<cache name="categoryCache" maxEntriesLocalHeap="10000" eternal="false" timeToLiveSeconds="3600"
+		overflowToDisk="false" maxEntriesLocalDisk="100000" />
+
+</ehcache>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<!-- 启用延迟加载 -->
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="aggressiveLazyLoading" value="false" /> 
+		<!-- 自动映射使用驼峰命名法,即数据库字段a_column对应domain字段aColum -->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- 给予被嵌套的resultMap以自动映射支持（注意多表join时，后表的同名字段值会覆盖前表的同名字段，可以使用别名来避免） -->
+		<setting name="autoMappingBehavior" value="FULL" />
+	</settings>
+	
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageHelper">
+			<property name="dialect" value="mysql" />
+			<!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+			<!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型） -->
+			<property name="pageSizeZero" value="true" />
+			<!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+			<!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+			<!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+			<property name="reasonable" value="true" />
+		</plugin>
+		<plugin interceptor="com.github.tx.mybatis.interceptor.AutoMappingInterceptor" />
+	</plugins>
+</configuration>

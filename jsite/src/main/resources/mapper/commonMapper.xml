@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="common">
+	<sql id="selectClause">
+		<where>
+			<foreach collection="condition.criterias" item="criteria" separator="or">
+				<trim prefix="(" suffix=")" prefixOverrides="and">
+					<foreach collection="criteria.criterions" item="criterion">
+						<choose>
+							<when test="criterion.noValue">
+								and ${criterion.condition}
+							</when>
+							<when test="criterion.singleValue">
+								and ${criterion.condition} #{criterion.value}
+							</when>
+							<when test="criterion.betweenValue">
+								and ${criterion.condition} #{criterion.value} and
+								#{criterion.secondValue}
+							</when>
+							<when test="criterion.listValue">
+								and ${criterion.condition}
+								<foreach collection="criterion.value" item="listItem"
+									open="(" close=")" separator=",">
+									#{listItem}
+								</foreach>
+							</when>
+						</choose>
+					</foreach>
+				</trim>
+			</foreach>
+		</where>
+		<if test="condition.groupByColumns.size() > 0">
+        	group by
+        	<foreach collection="condition.groupByColumns" item="groupByColumn" separator=",">
+				${groupByColumn}
+			</foreach>
+    	</if>
+		<trim prefix="order by" prefixOverrides="desc|asc">  
+			<foreach collection="condition.ascColumns" item="ascColumn" separator=",">
+				${ascColumn} asc
+			</foreach>
+			<if test="condition.ascColumns.size() > 0 and condition.descColumns.size() > 0">
+			,
+			</if>
+			<foreach collection="condition.descColumns" item="descColumn" separator=",">
+				${descColumn} desc
+			</foreach>
+		</trim>
+	</sql>
+</mapper>

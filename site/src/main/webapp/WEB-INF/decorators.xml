@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/views">
+
+	<!-- 不装饰的url -->
+	<excludes>
+		<pattern>/static/*</pattern>
+		<pattern>/sys/tag/*</pattern>
+		<pattern>/api/*</pattern>
+	</excludes>
+	
+	<!-- 默认装饰，包括菜单、js、css -->
+	<decorator name="default" page="decorators/default.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+
+	<!-- 无菜单有js和css的装饰，在页面增加<meta name="decorator" content="none"/>启用 -->	 
+	<decorator name="none" page="decorators/none.jsp"/>
+	
+	<!-- 用于装饰cms内容发布页面，在页面增加<meta name="decorator" content="cmsPublish"/>启用 -->	 
+	<decorator name="cmsPublish" page="decorators/cmsPublish.jsp"/>
+</decorators>

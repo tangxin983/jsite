@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="tangx.jsite.site.modules.cms.dao.ArticleDao">
+
+	<resultMap id="articleMap" type="Article">
+		<id property="id" column="id" />
+		<association property="category" javaType="Category"
+			resultMap="categoryMap" />
+	</resultMap>
+
+	<resultMap id="categoryMap" type="Category">
+		<id property="id" column="c_id" />
+		<result property="name" column="category_name" />
+	</resultMap>
+
+	<select id="findArticleByCategory" resultMap="articleMap">
+		select
+		cms_article.*, cms_category.id as c_id, cms_category.name as category_name
+		from cms_article
+		inner join cms_category on cms_article.category_id = cms_category.id
+		<if test="para.categoryId != null">
+			where cms_category.id = #{para.categoryId}
+			or cms_category.parent_ids like #{para.categoryPid}
+		</if>
+		order by cms_article.update_date desc
+	</select>
+</mapper>

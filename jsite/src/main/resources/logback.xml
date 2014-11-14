@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 级别从低到高：TRACE、DEBUG、INFO、WARN、ERROR。打印等于或高于本级别的日志 -->
+<!-- additivity="false" 禁止内容向上级传递  -->
+<configuration>
+	<!-- "oalog"生成在工程目录下,"/oalog"生成在工程所在盘符根目录下 -->
+	<property name="logBase" value="/oalog" />
+
+	<!-- 控制台输出 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- 格式化输出 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger.%M - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 每天生成日志文件  -->
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- 日志文件输出的文件名 -->  
+			<fileNamePattern>${logBase}/oa.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 日志文件保留天数 -->  
+            <MaxHistory>30</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<!-- 格式化输出 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger.%M - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 项目默认输出debug日志 -->
+	<logger name="com.github.tx.jsite" level="DEBUG" />
+	
+	<!-- spring -->
+	<logger name="org.springframework" level="ERROR" /> 
+	
+	<!-- activiti日志 -->
+	<logger name="org.activiti" level="ERROR" />
+	 
+	<!-- 
+	      默认打印所有包日志 包括第三方jar包日志 
+	      其他logger继承root 可通过additivity="false"禁止子logger向root传递 
+	      子logger的name就是包名
+	-->
+	<root level="ERROR">
+		<appender-ref ref="rollingFile" />
+		<appender-ref ref="console" />
+	</root>
+</configuration>

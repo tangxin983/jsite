@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.tx.jsite.modules.sys.dao.RoleDao">
+
+	<!-- one to many，由于有分页插件存在，不适用于返回list的情况只适用于返回单条信息的情况 -->
+	<resultMap id="roleMap" type="Role">
+		<id property="id" column="id" />
+		<collection property="menus" ofType="Menu" resultMap="menuMap" />
+	</resultMap>
+
+	<resultMap id="menuMap" type="Menu">
+		<result property="id" column="menu_id" />
+		<result property="name" column="menu_name" />
+	</resultMap>
+
+	<select id="findRoleByPrimaryKey" resultMap="roleMap" parameterType="String">
+		select
+		sys_role.*, sys_menu.id as menu_id, sys_menu.name as menu_name
+		from sys_role
+		left join sys_role_menu on sys_role.id = sys_role_menu.role_id
+		left join sys_menu on sys_menu.id = sys_role_menu.menu_id
+		where sys_role.id=#{id}
+	</select>
+</mapper>

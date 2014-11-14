@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<portable-config>
+	<config-file path="WEB-INF/classes/config.properties">
+		<!-- database -->
+		<replace key="jdbc.url"><![CDATA[jdbc:log4jdbc:mysql://localhost:3306/dining?useUnicode=true&characterEncoding=utf-8]]></replace>
+		<replace key="jdbc.username">root</replace>
+		<replace key="jdbc.password">root</replace>
+	</config-file>
+</portable-config>

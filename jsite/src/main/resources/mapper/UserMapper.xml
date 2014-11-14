@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.tx.jsite.modules.sys.dao.UserDao">
+
+	<!-- one to many，由于有分页插件存在，不适用于返回list的情况只适用于返回单条信息的情况 -->
+	<resultMap id="userMap" type="User">
+		<id property="id" column="id" />
+		<collection property="roles" ofType="Role" resultMap="roleMap" />
+	</resultMap>
+
+	<resultMap id="roleMap" type="Role">
+		<result property="id" column="role_id" />
+		<result property="name" column="role_name" />
+	</resultMap>
+
+	<sql id="selectBase">
+		select
+		sys_user.*, sys_role.id as role_id, sys_role.name as role_name
+		from sys_user
+		left join sys_user_role on sys_user.id = sys_user_role.user_id
+		left join sys_role on sys_role.id = sys_user_role.role_id
+	</sql>
+
+	<select id="findUserByPrimaryKey" resultMap="userMap" parameterType="String">
+		<include refid="selectBase" />
+		where sys_user.id=#{id}
+	</select>
+	
+	<select id="findUserByLoginName" resultMap="userMap">
+		<include refid="selectBase" />
+		<include refid="common.selectClause" />
+	</select>
+	
+	<!-- one to many要返回分页list时采用子查询方式解决  -->
+	<select id="findRolesForUser" resultType="Role">
+		select * from 
+		sys_role 
+		LEFT JOIN sys_user_role on sys_role.id = sys_user_role.role_id 
+		WHERE sys_user_role.user_id = #{id}
+	</select>
+	
+	<resultMap id="userListMap" type="User">
+		<id property="id" column="id" />
+		<collection property="roles" column="id" ofType="Role" select="findRolesForUser"/>
+	</resultMap>
+	
+	<select id="findUserList" resultMap="userListMap">
+		SELECT * FROM sys_user
+		<include refid="common.selectClause" />
+	</select>
+</mapper>
